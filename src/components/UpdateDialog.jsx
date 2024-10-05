@@ -5,8 +5,9 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { Edit2 } from 'lucide-react';
 
-const AddButton = () => {
+const UpdateDialog = () => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('personal');
   const [description, setDescription] = useState('');
@@ -46,13 +47,11 @@ const AddButton = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-          Add
-        </Button>
+        <Edit2 size={16} />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[525px]">
-        <DialogTitle className="text-2xl font-bold mb-4">New note</DialogTitle>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <DialogTitle className="text-2xl font-semibold">New note</DialogTitle>
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div className="flex space-x-4">
             <div className="flex-1">
               <Label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
@@ -111,11 +110,11 @@ const AddButton = () => {
           </div>
           <div className="flex justify-end space-x-2">
             <DialogClose asChild>
-              <Button type="button" variant="outline" className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <Button type="button" variant="outline">
                 Close
               </Button>
             </DialogClose>
-            <Button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <Button type="submit">
               Add Note
             </Button>
           </div>
@@ -123,6 +122,6 @@ const AddButton = () => {
       </DialogContent>
     </Dialog>
   );
-};
+}
 
-export default AddButton;
+export default UpdateDialog

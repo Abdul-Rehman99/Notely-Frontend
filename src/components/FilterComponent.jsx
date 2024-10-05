@@ -7,31 +7,31 @@ const sampleTasks = [
   {
     title: "Complete React Webpage",
     description: "I have to complete react project today at any how",
-    category: "Personal",
+    category: "personal",
     date: "26/7/2024",
   },
   {
     title: "Write Documentation",
-    description: "Document the new features for the upcoming release",
-    category: "Work",
+    description: "Document the new features for the upcoming release", 
+    category: "home",
     date: "27/7/2024",
   },
   {
     title: "Complete React Webpage",
     description: "I have to complete react project today at any how",
-    category: "Personal",
+    category: "business",
     date: "26/7/2024",
   },
   {
     title: "Write Documentation",
     description: "Document the new features for the upcoming release",
-    category: "Work",
+    category: "personal",
     date: "27/7/2024",
   },
   {
     title: "Team Meeting",
     description: "Discuss project progress and next steps",
-    category: "Work",
+    category: "home",
     date: "29/7/2024",
   }
   // Add more tasks as needed

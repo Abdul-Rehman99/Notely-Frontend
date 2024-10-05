@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { FaSearch } from 'react-icons/fa'
 import { SunMoon,MoonStar } from 'lucide-react';
-import AddButton from './AddButton';
+// import AddButton from './AddDialog';
+// import LoginDialog from './LoginDialog';
 // import Popup from './Popup';
-
+import AuthDialogsManager from './AuthDialog';
+import AddDialog from './AddDialog';
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -29,14 +31,16 @@ const Navbar = () => {
       {/* Buttons and Toggle */}
       <div className="flex items-center space-x-4">
         {/* <Popup /> */}
-        <AddButton />
-        <Button>Signup</Button>
-        <button
+        <AddDialog />
+        <AuthDialogsManager />
+        <Button
+        variant="outline"
+        size="icon"
           onClick={toggleDarkMode} 
-          className="p-2 rounded-full focus:outline-none bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700 transition"
+          className="transition" /**focus:outline-none bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700 */
         >
-          {darkMode ? <SunMoon /> : <MoonStar />}
-        </button>
+          {darkMode ? <SunMoon size={22}/> : <MoonStar size={22}/>}
+        </Button>
       </div>
     </nav>
   );
