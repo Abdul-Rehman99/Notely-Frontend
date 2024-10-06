@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import CardList from "./CardList";
-const sampleTasks = [
+import axios from "axios";
+const Tasks = [
   {
     title: "Complete React Webpage",
     description: "I have to complete react project today at any how",
@@ -36,7 +37,26 @@ const sampleTasks = [
   }
   // Add more tasks as needed
 ];
+
 const FilterComponent = () => {
+  const [sampleTasks,setSampleTasks] = useState([])
+  useEffect(() => {
+    const fetchData = async() => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/todos', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+          }
+        })
+        console.log(response.data)
+        setSampleTasks(response.data)
+      } 
+      catch (error) {
+        console.error('Error:', error.response ? error.response.data : error.message);
+      }
+    }
+    fetchData()
+  }, [])
   return (
     <div className="p-6">
       <h1 className="text-4xl font-bold mb-4">Your Notes</h1>
@@ -55,7 +75,7 @@ const FilterComponent = () => {
         </div>
         <TabsContent value="all">
           <div className="min-h-screen">
-            <CardList tasks={sampleTasks.slice(0, 2)} />
+            <CardList tasks={sampleTasks.slice(0, 8)} />
           </div>
         </TabsContent>
         <TabsContent value="home">

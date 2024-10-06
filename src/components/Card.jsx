@@ -31,7 +31,8 @@ const Card = ({ title, description, category, date }) => {
       <p className="leading-tight text-gray-600 dark:text-gray-300 mb-2">{description}</p> {/*mb-3 */}
       <div className="flex items-center justify-end text-sm text-gray-500 dark:text-gray-400">
         <Tag size={14} className="mr-1" />
-        <span>{date}</span>
+        <span>{new Date(date).toLocaleDateString('en-GB')}</span>
+        {/**new Date(date).toLocaleDateString('en-GB') */}
       </div>
     </div>
   );

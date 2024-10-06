@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import axios from 'axios';
 
 const AddDialog = () => {
   const [title, setTitle] = useState('');
@@ -32,11 +33,25 @@ const AddDialog = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (validateForm()) {
       console.log('Form submitted:', { title, category, description });
       // Here you would typically send the data to your backend
+      try {
+        const response = await axios.post('http://localhost:8080/api/todo',
+          { title, category, description },
+          {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`  
+            }
+          }
+        )
+        console.log('Response:', response.data);
+      } 
+      catch (error) {
+        console.error('Error in Creating Todo :', error.response ? error.response.data : error.message);
+      }
       
       clearForm();
       setOpen(false);

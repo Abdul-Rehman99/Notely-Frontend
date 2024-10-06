@@ -11,7 +11,8 @@ const CardList = ({tasks}) => {
           title={task.title}
           description={task.description}
           category={task.category}
-          date={task.date}
+          date={task.updatedAt}
+          //new Date(task.updatedAt).toLocaleDateString('en-GB')
         />
       ))}
     </div>

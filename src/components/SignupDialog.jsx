@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
+
 const SignupDialog = ({ isOpen, onClose, onLoginClick }) => {
-  const [name, setName] = useState('');
+  const [UserName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
     const newErrors = {};
-    if (!name.trim()) newErrors.name = 'Name is required';
+    if (!UserName.trim()) newErrors.username = 'Name is required';
     if (!email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(email)) {
@@ -27,11 +29,47 @@ const SignupDialog = ({ isOpen, onClose, onLoginClick }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+/*const loginUser = async (credentials) => {
+  try {
+    const response = await axios.post('https://your-api-url.com/login', {
+      username: credentials.username,
+      password: credentials.password
+    });
+
+    // Assuming the token is in the response body
+    const token = response.data.token; // Adjust this based on how the API responds
+
+    console.log("JWT Token:", token);
+    
+    // Optionally store the token in localStorage or a cookie
+    localStorage.setItem('jwtToken', token);
+
+    return token;
+  } catch (error) {
+    console.error("Error during authentication:", error.response.data);
+  }
+};
+
+// Usage
+loginUser({ username: 'yourUsername', password: 'yourPassword' }); */
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log('Signup form submitted:', { name, email, password });
+      console.log('Signup form submitted:', { username:UserName, email, password });
       // Here you would typically send the signup request to your backend
+      try {
+        const response = await axios.post('http://localhost:8080/api/signup',
+          { username:UserName, email, password }
+        )
+        const token = response.data.token;
+        console.log("JWT Token:", token);
+        localStorage.setItem('jwtToken', token);
+      } 
+      catch (error) {
+        console.error("Error during authentication:", error.response.data);
+      }
+
     }
   };
 
@@ -41,14 +79,14 @@ const SignupDialog = ({ isOpen, onClose, onLoginClick }) => {
         <DialogTitle className="text-2xl font-bold">Sign Up</DialogTitle>
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <Label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+            <Label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
               Name
             </Label>
             <Input
-              id="name"
-              placeholder="Enter your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              id="username"
+              placeholder="Enter your username"
+              value={UserName}
+              onChange={(e) => setUserName(e.target.value)}
               className={`w-full rounded-md shadow-sm focus:ring focus:ring-opacity-50 ${
                 errors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : 'border-gray-300 focus:border-blue-300 focus:ring-blue-200'
               }`}
