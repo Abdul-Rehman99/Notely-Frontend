@@ -6,8 +6,11 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import axios from 'axios';
+import { Context } from "../App";
+import { useContext } from 'react';
 
 const AddDialog = () => {
+  const { setIsTaskModified } = useContext(Context);
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('personal');
   const [description, setDescription] = useState('');
@@ -37,7 +40,6 @@ const AddDialog = () => {
     e.preventDefault();
     if (validateForm()) {
       console.log('Form submitted:', { title, category, description });
-      // Here you would typically send the data to your backend
       try {
         const response = await axios.post('http://localhost:8080/api/todo',
           { title, category, description },
@@ -48,6 +50,7 @@ const AddDialog = () => {
           }
         )
         console.log('Response:', response.data);
+        setIsTaskModified(prev => !prev)
       } 
       catch (error) {
         console.error('Error in Creating Todo :', error.response ? error.response.data : error.message);

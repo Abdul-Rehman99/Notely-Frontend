@@ -7,8 +7,11 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Textarea } from '@/components/ui/textarea';
 import { Edit2 } from 'lucide-react';
 import axios from 'axios';
+import { Context } from "../App";
+import { useContext } from 'react';
 
 const UpdateDialog = ({data}) => {
+  const { setIsTaskModified } = useContext(Context)
   console.log(data)
   const [title, setTitle] = useState(data.title);
   const [category, setCategory] = useState(data.category);
@@ -16,12 +19,6 @@ const UpdateDialog = ({data}) => {
   const [errors, setErrors] = useState({});
   const [open, setOpen] = useState(false)
 
-  // const clearForm = () => {
-  //   setTitle('')
-  //   setCategory('personal');
-  //   setDescription('');
-  //   setErrors({})
-  // }
 
   const validateForm = () => {
     const newErrors = {};
@@ -49,7 +46,10 @@ const UpdateDialog = ({data}) => {
             }
           }
         )
-      } catch (error) {
+        console.log(response.data)
+        setIsTaskModified(prev => !prev)
+      } 
+      catch (error) {
         console.error('Error in Creating Todo :', error.response ? error.response.data : error.message);
       }
       

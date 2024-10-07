@@ -12,9 +12,11 @@ import {
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { Trash2 } from 'lucide-react';
+import { Context } from "../App";
+import { useContext } from 'react';
 
 const DeleteDialog = ({id}) => {
-
+  const { setIsTaskModified } = useContext(Context);
   const handleDelete = async() => {
     try {
       const response = await axios.delete(`http://localhost:8080/api/todo/${id}`,
@@ -25,6 +27,7 @@ const DeleteDialog = ({id}) => {
         }
       )
       console.log('Response:', response.data);
+      setIsTaskModified(prev => !prev)
     } 
     catch (error) {
       console.error('Error in Deleting Todo :', error.response ? error.response.data : error.message);
