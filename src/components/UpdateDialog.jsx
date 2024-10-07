@@ -6,20 +6,22 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Edit2 } from 'lucide-react';
+import axios from 'axios';
 
-const UpdateDialog = () => {
-  const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('personal');
-  const [description, setDescription] = useState('');
+const UpdateDialog = ({data}) => {
+  console.log(data)
+  const [title, setTitle] = useState(data.title);
+  const [category, setCategory] = useState(data.category);
+  const [description, setDescription] = useState(data.description);
   const [errors, setErrors] = useState({});
   const [open, setOpen] = useState(false)
 
-  const clearForm = () => {
-    setTitle('')
-    setCategory('personal');
-    setDescription('');
-    setErrors({})
-  }
+  // const clearForm = () => {
+  //   setTitle('')
+  //   setCategory('personal');
+  //   setDescription('');
+  //   setErrors({})
+  // }
 
   const validateForm = () => {
     const newErrors = {};
@@ -33,13 +35,25 @@ const UpdateDialog = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (validateForm()) {
       console.log('Form submitted:', { title, category, description });
       // Here you would typically send the data to your backend
+      try {
+        const response = await axios.put(`http://localhost:8080/api/todo/${data.id}`,
+          { title, category, description },
+          {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`  
+            }
+          }
+        )
+      } catch (error) {
+        console.error('Error in Creating Todo :', error.response ? error.response.data : error.message);
+      }
       
-      clearForm();
+      // clearForm();
       setOpen(false);
     }
   };

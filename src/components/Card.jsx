@@ -4,7 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import DeleteDialog from './DeleteDialog';
 import UpdateDialog from './UpdateDialog';
 
-const Card = ({ title, description, category, date }) => {
+const Card = ({ id, title, description, category, date }) => {
   const categoryColor = 
   {
     personal: 'bg-orange-200 dark:bg-orange-700 text-orange-800 dark:text-orange-200',
@@ -12,7 +12,7 @@ const Card = ({ title, description, category, date }) => {
     business: 'bg-purple-200 dark:bg-purple-700 text-purple-800 dark:text-purple-200'
   }
   return (
-    <div className="bg-white relative space-y-1.5 dark:bg-gray-800 rounded-lg shadow-xl p-4 pb-3 max-w-sm w-full mx-auto transition-colors duration-200">
+    <div className="bg-white relative space-y-1.5 dark:bg-gray-800 rounded-lg shadow-lg border p-4 pb-3 max-w-sm w-full mx-auto transition-colors duration-200">
       <div className="flex justify-between items-center">{/*mb-2 items-start*/}
         <span className={`inline-block text-xs font-semibold rounded-full px-2 py-1 ${categoryColor[category]}`}>
           {category}
@@ -20,10 +20,10 @@ const Card = ({ title, description, category, date }) => {
         <div className="flex space-x-2">
           <Checkbox />
           <button className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-            <UpdateDialog/>
+            <UpdateDialog data={{id,title,description,category}}/>
           </button>
           <button className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-            <DeleteDialog />
+            <DeleteDialog id={id}/>
           </button>
         </div>
       </div>

@@ -28,7 +28,8 @@ const AuthDialogsManager = () => {
         Login
       </Button>
       <LoginDialog 
-        isOpen={isLoginOpen} 
+        isOpen={isLoginOpen}
+        setIsLoginOpen={setIsLoginOpen}
         onClose={closeAllDialogs} 
         onSignupClick={openSignupDialog} 
       />

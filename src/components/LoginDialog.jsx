@@ -3,8 +3,9 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogClose } from '
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import axios from 'axios';
 
-const LoginDialog = ({ isOpen, onClose, onSignupClick }) => {
+const LoginDialog = ({ isOpen, setIsLoginOpen, onClose, onSignupClick }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
@@ -25,11 +26,23 @@ const LoginDialog = ({ isOpen, onClose, onSignupClick }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (validateForm()) {
       console.log('Login form submitted:', { email, password });
       // Here you would typically send the login request to your backend
+      try {
+        const response = await axios.post('http://localhost:8080/api/login',
+          {email,password}
+        )
+        const token = response.data.token; 
+        console.log("JWT Token:", token);
+        localStorage.setItem('jwtToken', token);
+      } 
+      catch (error) {
+        console.error('Error:', error.response ? error.response.data : error.message);
+      }
+      setIsLoginOpen(false)
     }
   };
 
@@ -44,7 +57,6 @@ const LoginDialog = ({ isOpen, onClose, onSignupClick }) => {
             </Label>
             <Input
               id="email"
-              type="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

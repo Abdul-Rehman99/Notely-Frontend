@@ -7,12 +7,12 @@ const CardList = ({tasks}) => {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {tasks.map((task, index) => (
         <Card
-          key={index}
+          key={task._id+index}
+          id={task._id}
           title={task.title}
           description={task.description}
           category={task.category}
           date={task.updatedAt}
-          //new Date(task.updatedAt).toLocaleDateString('en-GB')
         />
       ))}
     </div>
