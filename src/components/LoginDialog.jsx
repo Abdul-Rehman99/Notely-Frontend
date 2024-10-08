@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import axios from 'axios';
+import { Context } from '../App';
 
-const LoginDialog = ({ isOpen, setIsLoginOpen, onClose, onSignupClick }) => {
+
+const LoginDialog = ({ isOpen, onClose, onSignupClick }) => {
+  const { setIsLogedIn } = useContext(Context);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
@@ -30,7 +33,6 @@ const LoginDialog = ({ isOpen, setIsLoginOpen, onClose, onSignupClick }) => {
     e.preventDefault();
     if (validateForm()) {
       console.log('Login form submitted:', { email, password });
-      // Here you would typically send the login request to your backend
       try {
         const response = await axios.post('http://localhost:8080/api/login',
           {email,password}
@@ -38,11 +40,15 @@ const LoginDialog = ({ isOpen, setIsLoginOpen, onClose, onSignupClick }) => {
         const token = response.data.token; 
         console.log("JWT Token:", token);
         localStorage.setItem('jwtToken', token);
+        setIsLogedIn(true)
+        onClose();
+        window.location.reload();
       } 
       catch (error) {
         console.error('Error:', error.response ? error.response.data : error.message);
+        onClose();
+        localStorage.clear()
       }
-      setIsLoginOpen(false)
     }
   };
 

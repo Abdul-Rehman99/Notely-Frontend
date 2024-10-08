@@ -1,16 +1,27 @@
 import Navbar from "./components/Navbar";
 import FilterComponent from "./components/FilterComponent";
-import {createContext, useState} from 'react'
+import {createContext, useEffect, useState} from 'react'
+import WelcomePage from "./components/WelcomePage";
 
 export const Context = createContext();
 
 export default function App() {
   const [isTaskModified,setIsTaskModified] = useState(false)
+  const [isLogedIn, setIsLogedIn] = useState(false)
+
+  useEffect(() => {
+    if(localStorage.getItem('jwtToken')){
+      setIsLogedIn(true)
+    }
+  },[])
   
   return (
-    <Context.Provider value={{isTaskModified,setIsTaskModified}}>
+    <Context.Provider value={{isTaskModified,setIsTaskModified,isLogedIn,setIsLogedIn}}>
       <Navbar />
-      <FilterComponent />
+      {
+      isLogedIn?<FilterComponent />: 
+      <WelcomePage/>
+      }
     </Context.Provider>
   );
 }

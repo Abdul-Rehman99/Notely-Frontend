@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-
+import { Context } from '../App'
 
 const SignupDialog = ({ isOpen, onClose, onLoginClick }) => {
+  const { setIsLogedIn } = useContext(Context);
   const [UserName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,35 +30,10 @@ const SignupDialog = ({ isOpen, onClose, onLoginClick }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-/*const loginUser = async (credentials) => {
-  try {
-    const response = await axios.post('https://your-api-url.com/login', {
-      username: credentials.username,
-      password: credentials.password
-    });
-
-    // Assuming the token is in the response body
-    const token = response.data.token; // Adjust this based on how the API responds
-
-    console.log("JWT Token:", token);
-    
-    // Optionally store the token in localStorage or a cookie
-    localStorage.setItem('jwtToken', token);
-
-    return token;
-  } catch (error) {
-    console.error("Error during authentication:", error.response.data);
-  }
-};
-
-// Usage
-loginUser({ username: 'yourUsername', password: 'yourPassword' }); */
-
   const handleSubmit = async(e) => {
     e.preventDefault();
     if (validateForm()) {
       console.log('Signup form submitted:', { username:UserName, email, password });
-      // Here you would typically send the signup request to your backend
       try {
         const response = await axios.post('http://localhost:8080/api/signup',
           { username:UserName, email, password }
@@ -65,9 +41,14 @@ loginUser({ username: 'yourUsername', password: 'yourPassword' }); */
         const token = response.data.token;
         console.log("JWT Token:", token);
         localStorage.setItem('jwtToken', token);
+        setIsLogedIn(true)
+        onClose()
+        window.location.reload();
       } 
       catch (error) {
         console.error("Error during authentication:", error.response.data);
+        onClose()
+        localStorage.clear()
       }
 
     }
