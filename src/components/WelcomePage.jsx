@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Notebook, ArrowRight } from 'lucide-react';
+import LoginDialog from './LoginDialog'; 
 
-const WelcomePage = ({ onLogin }) => {
+const WelcomePage = () => {
+  const [isLoginOpen, setIsLoginOpen] = useState(false); 
+
+  const handleLoginOpen = () => {
+    setIsLoginOpen(true); 
+  };
+
+  const handleLoginClose = () => {
+    setIsLoginOpen(false);
+  };
+
+  const handleSignupClick = () => {
+  
+    console.log("Redirect to sign-up page");
+  };
+
   return (
     <div className="flex items-center justify-center h-[calc(100vh-64px)] bg-gray-100 dark:bg-gray-800 p-4">
       <Card className="w-full max-w-md">
@@ -22,7 +38,7 @@ const WelcomePage = ({ onLogin }) => {
         </CardContent>
         <CardFooter className="flex flex-col items-center">
           <Button 
-            onClick={onLogin} 
+            onClick={handleLoginOpen} 
             className="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white transition-colors duration-300"
           >
             Start Writing
@@ -33,6 +49,13 @@ const WelcomePage = ({ onLogin }) => {
           </p>
         </CardFooter>
       </Card>
+
+      
+      <LoginDialog 
+        isOpen={isLoginOpen} 
+        onClose={handleLoginClose} 
+        onSignupClick={handleSignupClick} 
+      />
     </div>
   );
 };
