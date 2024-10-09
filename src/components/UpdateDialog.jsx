@@ -36,7 +36,6 @@ const UpdateDialog = ({data}) => {
     e.preventDefault();
     if (validateForm()) {
       console.log('Form submitted:', { title, category, description });
-      // Here you would typically send the data to your backend
       try {
         const response = await axios.put(`http://localhost:8080/api/todo/${data.id}`,
           { title, category, description },
@@ -52,9 +51,8 @@ const UpdateDialog = ({data}) => {
       catch (error) {
         console.error('Error in Creating Todo :', error.response ? error.response.data : error.message);
       }
-      
-      // clearForm();
       setOpen(false);
+      clearForm();
     }
   };
 

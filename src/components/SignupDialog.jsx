@@ -5,8 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Context } from '../App'
+import { useToast } from "../hooks/use-toast.js"
 
 const SignupDialog = ({ isOpen, onClose, onLoginClick }) => {
+  const { toast } = useToast()
   const { setIsLogedIn } = useContext(Context);
   const [UserName, setUserName] = useState('');
   const [email, setEmail] = useState('');
@@ -48,6 +50,11 @@ const SignupDialog = ({ isOpen, onClose, onLoginClick }) => {
       catch (error) {
         console.error("Error during authentication:", error.response.data);
         onClose()
+        toast({
+          title: "Uh oh! Something went wrong.",
+          description: error.response ? error.response.data.message : error.message,
+          variant: "destructive"
+        })
         localStorage.clear()
       }
 

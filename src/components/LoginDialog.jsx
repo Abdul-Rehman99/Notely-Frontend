@@ -1,17 +1,25 @@
-import React, { useState, useContext } from 'react';
-import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
+import  { useState, useContext } from 'react';
+import { Dialog, DialogContent, DialogTitle} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import axios from 'axios';
 import { Context } from '../App';
+import { useToast } from "../hooks/use-toast.js"
 
 
 const LoginDialog = ({ isOpen, onClose, onSignupClick }) => {
+  const { toast } = useToast()
   const { setIsLogedIn } = useContext(Context);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+
+  const clearForm = ( ) => {
+    setEmail('')
+    setPassword('')
+    setErrors('')
+  }
 
   const validateForm = () => {
     const newErrors = {};
@@ -42,11 +50,21 @@ const LoginDialog = ({ isOpen, onClose, onSignupClick }) => {
         localStorage.setItem('jwtToken', token);
         setIsLogedIn(true)
         onClose();
+        toast({
+          description: "You are sucessfully logged In.",
+        })
         window.location.reload();
       } 
       catch (error) {
-        console.error('Error:', error.response ? error.response.data : error.message);
+        // console.log('Error:', error.response ? error.response.data.message : error.message);
+        console.log("Server Error -",error.response.data)
         onClose();
+        toast({
+          title: "Uh oh! Something went wrong.",
+          description: error.response ? error.response.data.message : error.message,
+          variant: "destructive"
+        })
+        clearForm()
         localStorage.clear()
       }
     }

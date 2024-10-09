@@ -4,11 +4,10 @@ import LoginDialog from './LoginDialog';
 import SignupDialog from './SignupDialog';
 import { Context } from '../App';
 const AuthDialogsManager = () => {
-  const { isLogedIn,setIsLogedIn } = useContext(Context)
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const { isLogedIn, setIsLogedIn, isLoginOpen, setIsLoginOpen } = useContext(Context)
   const [isSignupOpen, setIsSignupOpen] = useState(false);
 
-  const openLoginDialog = () => {
+    const openLoginDialog = () => {
     setIsLoginOpen(true);
     setIsSignupOpen(false);
   };
@@ -37,7 +36,7 @@ const AuthDialogsManager = () => {
          Logout
         </Button>
         :
-        <Button onClick={openLoginDialog} > {/**className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded" */}
+        <Button onClick={openLoginDialog} >
         Login
         </Button>
       }

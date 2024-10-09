@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Notebook, ArrowRight } from 'lucide-react';
+import { Context } from '../App';
 
-const WelcomePage = ({ onLogin }) => {
+const WelcomePage = () => {
+  const { setIsLoginOpen } = useContext(Context)
   return (
     <div className="flex items-center justify-center h-[calc(100vh-64px)] bg-gray-100 dark:bg-gray-800 p-4">
       <Card className="w-full max-w-md">
@@ -22,7 +24,7 @@ const WelcomePage = ({ onLogin }) => {
         </CardContent>
         <CardFooter className="flex flex-col items-center">
           <Button 
-            onClick={onLogin} 
+            onClick={() => setIsLoginOpen(true)} 
             className="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white transition-colors duration-300"
           >
             Start Writing
