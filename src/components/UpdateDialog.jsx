@@ -62,7 +62,7 @@ const UpdateDialog = ({data}) => {
         <Edit2 size={16} />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[525px]">
-        <DialogTitle className="text-2xl font-semibold">New note</DialogTitle>
+        <DialogTitle className="text-2xl font-semibold">Edit note</DialogTitle>
         <form onSubmit={handleSubmit} className="space-y-3">
           <div className="flex space-x-4">
             <div className="flex-1">
@@ -127,7 +127,7 @@ const UpdateDialog = ({data}) => {
               </Button>
             </DialogClose>
             <Button type="submit">
-              Add Note
+              Edit Note
             </Button>
           </div>
         </form>

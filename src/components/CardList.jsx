@@ -13,6 +13,7 @@ const CardList = ({tasks}) => {
           description={task.description}
           category={task.category}
           date={task.updatedAt}
+          isCompleted={task.isCompleted}
         />
       ))}
     </div>

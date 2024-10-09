@@ -10,6 +10,7 @@ export default function App() {
   const [isTaskModified,setIsTaskModified] = useState(false)
   const [isLogedIn, setIsLogedIn] = useState(false)
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     if(localStorage.getItem('jwtToken')){
@@ -19,7 +20,12 @@ export default function App() {
   
   return (
     <Context.Provider value={
-      {isTaskModified,setIsTaskModified,isLogedIn,setIsLogedIn,isLoginOpen, setIsLoginOpen}
+      { 
+        isTaskModified,setIsTaskModified,
+        isLogedIn,setIsLogedIn,
+        isLoginOpen, setIsLoginOpen,
+        searchQuery, setSearchQuery
+      }
       }>
       <Navbar />
       {

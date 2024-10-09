@@ -1,22 +1,44 @@
-import React from 'react';
 import { Tag } from 'lucide-react';
 import UpdateDialog from './UpdateDialog';
 import DeleteDialog from './DeleteDialog';
 import { Checkbox } from "@/components/ui/checkbox";
+import axios from 'axios';
+import { Context } from "../App";
+import { useContext } from 'react';
 
 const Card = ({ id, title, description, category, isCompleted, date }) => {
+  const { setIsTaskModified } = useContext(Context)
   const categoryColor = {
     personal: 'bg-orange-200 dark:bg-orange-700 text-orange-800 dark:text-orange-200',
-    home: 'bg-rose-200 dark:bg-rose-700 text-rose-800 dark:text-rose-200',
+    home: 'bg-indigo-200 dark:bg-indigo-700 text-indigo-800 dark:text-indigo-200',
     business: 'bg-purple-200 dark:bg-purple-700 text-purple-800 dark:text-purple-200'
   };
 
   const completedStyles = isCompleted
-    ? 'opacity-70 bg-gray-100 dark:bg-gray-700'
-    : 'bg-white dark:bg-gray-800';
+    ? 'opacity-90 shadow-xl bg-gray-100 dark:bg-gray-700'
+    : 'bg-white shadow-lg dark:bg-gray-800';
+
+  const handleIsCompleted = async(id,isCompleted) => {
+    try {
+      const response = await axios.put(`http://localhost:8080/api/todo/${id}`,
+        {isCompleted},
+        {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`  
+          }
+        }
+      )
+      console.log(response.data)
+      setIsTaskModified(prev => !prev)
+    } 
+    catch (error) {
+      console.log("Error in Upadting isCompleted state")
+      console.log(error.resonse ? error.resonse.data.message: error.message)
+    }
+  }
 
   return (
-    <div className={`relative space-y-1.5 rounded-lg shadow-lg border p-4 pb-3 max-w-sm w-full mx-auto transition-colors duration-200 ${completedStyles}`}>
+    <div className={`relative space-y-1.5 rounded-lg border p-4 pb-3 max-w-sm w-full mx-auto transition-colors duration-200 ${completedStyles}`}>
       {isCompleted && (
         <div className="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
           Completed
@@ -27,10 +49,12 @@ const Card = ({ id, title, description, category, isCompleted, date }) => {
           {category}
         </span>
         <div className="flex space-x-2">
-          <Checkbox checked={isCompleted} />
-          <button className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+          <Checkbox checked={isCompleted} onCheckedChange={() => handleIsCompleted(id,!isCompleted)}/>
+          {!isCompleted &&
+          (<button className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
             <UpdateDialog data={{id, title, description, category}} />
-          </button>
+          </button>)
+          }
           <button className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
             <DeleteDialog id={id} />
           </button>

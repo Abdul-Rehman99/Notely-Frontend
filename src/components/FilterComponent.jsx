@@ -7,61 +7,33 @@ import axios from "axios";
 import { Context } from "../App";
 import { useContext } from 'react';
 
-// const Tasks = [
-//   {
-//     title: "Complete React Webpage",
-//     description: "I have to complete react project today at any how",
-//     category: "personal",
-//     date: "26/7/2024",
-//   },
-//   {
-//     title: "Write Documentation",
-//     description: "Document the new features for the upcoming release", 
-//     category: "home",
-//     date: "27/7/2024",
-//   },
-//   {
-//     title: "Complete React Webpage",
-//     description: "I have to complete react project today at any how",
-//     category: "business",
-//     date: "26/7/2024",
-//   },
-//   {
-//     title: "Write Documentation",
-//     description: "Document the new features for the upcoming release",
-//     category: "personal",
-//     date: "27/7/2024",
-//   },
-//   {
-//     title: "Team Meeting",
-//     description: "Discuss project progress and next steps",
-//     category: "home",
-//     date: "29/7/2024",
-//   }
-//   // Add more tasks as needed
-// ];
-
 const FilterComponent = () => {
   const [sampleTasks,setSampleTasks] = useState([])
-  const { isTaskModified } = useContext(Context);
+  const [isCheked,setIsChecked] = useState(false)
+  const { isTaskModified, searchQuery } = useContext(Context);
 
   useEffect(() => {
     const fetchData = async() => {
       try {
-        const response = await axios.get('http://localhost:8080/api/todos', {
+        const response = await axios.get(`http://localhost:8080/api/todos?isChecked=${isCheked}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
           }
         })
         console.log(response.data)
         setSampleTasks(response.data)
+        setData(response.data)
       } 
       catch (error) {
         console.error('Error:', error.response ? error.response.data : error.message);
       }
     }
     fetchData()
-  }, [isTaskModified])
+  },[isTaskModified,isCheked])
+
+  const filteredTasks = sampleTasks.filter(task =>
+    task.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="p-6">
@@ -75,28 +47,28 @@ const FilterComponent = () => {
             <TabsTrigger value="personal">PERSONAL</TabsTrigger>
           </TabsList>
           <div className="flex items-center space-x-2">
-            <Checkbox id="terms" />
+            <Checkbox id="terms" onCheckedChange={() => setIsChecked(prev => !prev)}/>
             <Label htmlFor="terms">Show only completed notes</Label>
           </div>
         </div>
         <TabsContent value="all">
           <div className="min-h-screen">
-            <CardList tasks={sampleTasks} />
+            <CardList tasks={filteredTasks} />
           </div>
         </TabsContent>
         <TabsContent value="home">
           <div className="min-h-screen">
-            <CardList tasks={sampleTasks.filter(({category}) => category=== "home") } />
+            <CardList tasks={filteredTasks.filter(({category}) => category==="home")}/>
           </div>
         </TabsContent>
         <TabsContent value="business">
           <div className="min-h-screen">
-          <CardList tasks={sampleTasks.filter(({category}) => category=== "business") } />
+          <CardList tasks={filteredTasks.filter(({category}) => category==="business")}/>
           </div>
         </TabsContent>
         <TabsContent value="personal">
           <div className="min-h-screen">
-            <CardList tasks={sampleTasks.filter(({category}) => category=== "personal")} />
+            <CardList tasks={filteredTasks.filter(({category}) => category==="personal")}/>
           </div>
         </TabsContent>
       </Tabs>

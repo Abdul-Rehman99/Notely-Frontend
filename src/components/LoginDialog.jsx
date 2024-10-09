@@ -50,9 +50,6 @@ const LoginDialog = ({ isOpen, onClose, onSignupClick }) => {
         localStorage.setItem('jwtToken', token);
         setIsLogedIn(true)
         onClose();
-        toast({
-          description: "You are sucessfully logged In.",
-        })
         window.location.reload();
       } 
       catch (error) {
