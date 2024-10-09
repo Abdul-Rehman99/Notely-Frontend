@@ -56,7 +56,7 @@ const AddDialog = () => {
       console.log("Form submitted:", { title, category, description });
       try {
         const response = await axios.post(
-          "http://localhost:8080/api/todo",
+          `${import.meta.env.VITE_BACKEND_URL}/api/todo`,
           { title, category, description },
           {
             headers: {

@@ -20,7 +20,7 @@ const Card = ({ id, title, description, category, isCompleted, date }) => {
 
   const handleIsCompleted = async(id,isCompleted) => {
     try {
-      const response = await axios.put(`http://localhost:8080/api/todo/${id}`,
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/todo/${id}`,
         {isCompleted},
         {
           headers: {

@@ -37,7 +37,7 @@ const UpdateDialog = ({data}) => {
     if (validateForm()) {
       console.log('Form submitted:', { title, category, description });
       try {
-        const response = await axios.put(`http://localhost:8080/api/todo/${data.id}`,
+        const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/todo/${data.id}`,
           { title, category, description },
           {
             headers: {

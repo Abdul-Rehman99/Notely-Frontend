@@ -42,7 +42,7 @@ const LoginDialog = ({ isOpen, onClose, onSignupClick }) => {
     if (validateForm()) {
       console.log('Login form submitted:', { email, password });
       try {
-        const response = await axios.post('http://localhost:8080/api/login',
+        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/login`,
           {email,password}
         )
         const token = response.data.token; 

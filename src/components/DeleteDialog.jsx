@@ -19,7 +19,7 @@ const DeleteDialog = ({id}) => {
   const { setIsTaskModified } = useContext(Context);
   const handleDelete = async() => {
     try {
-      const response = await axios.delete(`http://localhost:8080/api/todo/${id}`,
+      const response = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/todo/${id}`,
         {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`  

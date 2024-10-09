@@ -15,14 +15,13 @@ const FilterComponent = () => {
   useEffect(() => {
     const fetchData = async() => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/todos?isChecked=${isCheked}`, {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/todos?isChecked=${isCheked}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
           }
         })
         console.log(response.data)
         setSampleTasks(response.data)
-        setData(response.data)
       } 
       catch (error) {
         console.error('Error:', error.response ? error.response.data : error.message);
