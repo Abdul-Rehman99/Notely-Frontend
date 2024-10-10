@@ -6,20 +6,19 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Edit2 } from 'lucide-react';
+import axios from 'axios';
+import { Context } from "../App";
+import { useContext } from 'react';
 
-const UpdateDialog = () => {
-  const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('personal');
-  const [description, setDescription] = useState('');
+const UpdateDialog = ({data}) => {
+  const { setIsTaskModified } = useContext(Context)
+  console.log(data)
+  const [title, setTitle] = useState(data.title);
+  const [category, setCategory] = useState(data.category);
+  const [description, setDescription] = useState(data.description);
   const [errors, setErrors] = useState({});
   const [open, setOpen] = useState(false)
 
-  const clearForm = () => {
-    setTitle('')
-    setCategory('personal');
-    setDescription('');
-    setErrors({})
-  }
 
   const validateForm = () => {
     const newErrors = {};
@@ -33,14 +32,27 @@ const UpdateDialog = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (validateForm()) {
       console.log('Form submitted:', { title, category, description });
-      // Here you would typically send the data to your backend
-      
-      clearForm();
+      try {
+        const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/todo/${data.id}`,
+          { title, category, description },
+          {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`  
+            }
+          }
+        )
+        console.log(response.data)
+        setIsTaskModified(prev => !prev)
+      } 
+      catch (error) {
+        console.error('Error in Creating Todo :', error.response ? error.response.data : error.message);
+      }
       setOpen(false);
+      clearForm();
     }
   };
 
@@ -50,7 +62,7 @@ const UpdateDialog = () => {
         <Edit2 size={16} />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[525px]">
-        <DialogTitle className="text-2xl font-semibold">New note</DialogTitle>
+        <DialogTitle className="text-2xl font-semibold">Edit note</DialogTitle>
         <form onSubmit={handleSubmit} className="space-y-3">
           <div className="flex space-x-4">
             <div className="flex-1">
@@ -115,7 +127,7 @@ const UpdateDialog = () => {
               </Button>
             </DialogClose>
             <Button type="submit">
-              Add Note
+              Edit Note
             </Button>
           </div>
         </form>

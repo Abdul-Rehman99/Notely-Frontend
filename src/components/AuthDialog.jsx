@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button } from '@/components/ui/button';
 import LoginDialog from './LoginDialog';
 import SignupDialog from './SignupDialog';
-
+import { Context } from '../App';
 const AuthDialogsManager = () => {
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const { isLogedIn, setIsLogedIn, isLoginOpen, setIsLoginOpen } = useContext(Context)
   const [isSignupOpen, setIsSignupOpen] = useState(false);
 
-  const openLoginDialog = () => {
+    const openLoginDialog = () => {
     setIsLoginOpen(true);
     setIsSignupOpen(false);
   };
@@ -22,13 +22,26 @@ const AuthDialogsManager = () => {
     setIsSignupOpen(false);
   };
 
+  const handleLogout = () =>{
+    setIsLogedIn(false)
+    localStorage.clear();
+    window.location.reload();
+  }
+
   return (
     <div>
-      <Button onClick={openLoginDialog} > {/**className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded" */}
+      {
+        isLogedIn?
+        <Button onClick={handleLogout}>
+         Logout
+        </Button>
+        :
+        <Button onClick={openLoginDialog} >
         Login
-      </Button>
+        </Button>
+      }
       <LoginDialog 
-        isOpen={isLoginOpen} 
+        isOpen={isLoginOpen}
         onClose={closeAllDialogs} 
         onSignupClick={openSignupDialog} 
       />

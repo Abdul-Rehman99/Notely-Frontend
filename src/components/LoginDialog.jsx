@@ -1,13 +1,25 @@
-import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
+import  { useState, useContext } from 'react';
+import { Dialog, DialogContent, DialogTitle} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import axios from 'axios';
+import { Context } from '../App';
+import { useToast } from "../hooks/use-toast.js"
+
 
 const LoginDialog = ({ isOpen, onClose, onSignupClick }) => {
+  const { toast } = useToast()
+  const { setIsLogedIn } = useContext(Context);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+
+  const clearForm = ( ) => {
+    setEmail('')
+    setPassword('')
+    setErrors('')
+  }
 
   const validateForm = () => {
     const newErrors = {};
@@ -25,11 +37,33 @@ const LoginDialog = ({ isOpen, onClose, onSignupClick }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (validateForm()) {
       console.log('Login form submitted:', { email, password });
-      // Here you would typically send the login request to your backend
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/login`,
+          {email,password}
+        )
+        const token = response.data.token; 
+        console.log("JWT Token:", token);
+        localStorage.setItem('jwtToken', token);
+        setIsLogedIn(true)
+        onClose();
+        window.location.reload();
+      } 
+      catch (error) {
+        // console.log('Error:', error.response ? error.response.data.message : error.message);
+        console.log("Server Error -",error.response.data)
+        onClose();
+        toast({
+          title: "Uh oh! Something went wrong.",
+          description: error.response ? error.response.data.message : error.message,
+          variant: "destructive"
+        })
+        clearForm()
+        localStorage.clear()
+      }
     }
   };
 
@@ -44,7 +78,6 @@ const LoginDialog = ({ isOpen, onClose, onSignupClick }) => {
             </Label>
             <Input
               id="email"
-              type="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
